@@ -47,7 +47,7 @@ Make sure you have [Python 3.8+](https://www.python.org/downloads/) installed.
 ### 2. Installation
 Clone this repository and navigate to the project directory:
 ```bash
-git clone https://github.com/your-username/tiktok-bulk-downloader.git
+git clone https://github.com/farhanaliabbasi/tiktok-bulk-downloader.git
 cd tiktok-bulk-downloader
 ```
 
