@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Bulk Video Downloader | premium Dashboard</title>
+    <meta name="description" content="A powerful, highly responsive, and premium web dashboard to bulk download TikTok videos from link files with live status tracking and integrated gallery playback.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="stars-container"></div>
+    <div class="glowing-orb orb-1"></div>
+    <div class="glowing-orb orb-2"></div>
+
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header animate-fade-in">
+            <div class="header-logo">
+                <span class="logo-icon"><i class="fab fa-tiktok"></i></span>
+                <div class="logo-text">
+                    <h1>TIKTOK <span>BULK PRO</span></h1>
+                    <p>Automated High-Speed Video Downloader</p>
+                </div>
+            </div>
+            <div class="header-status">
+                <span class="status-indicator online"></span>
+                <span class="status-label">System Active</span>
+            </div>
+        </header>
+
+        <!-- MAIN LAYOUT GRID -->
+        <main class="main-grid">
+            
+            <!-- LEFT COLUMN: CONTROLS & PARSED LINKS -->
+            <section class="grid-col-left animate-slide-in">
+                <!-- PANEL: UPLOAD AND CORE CONTROLS -->
+                <div class="glass-panel panel-controls">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-file-upload"></i> Upload & Download Links</h2>
+                    </div>
+                    
+                    <!-- Direct Link Input (One-by-One) -->
+                    <div class="single-link-input-container">
+                        <div class="input-glow-group">
+                            <input type="text" id="input-single-link" class="form-control" placeholder="Paste a TikTok link here...">
+                            <button class="btn" id="btn-add-link">
+                                <i class="fas fa-plus-circle"></i> Add to Queue
+                            </button>
+                        </div>
+                        <div class="divider"><span>OR</span></div>
+                    </div>
+                    
+                    <div class="upload-dropzone" id="dropzone">
+                        <input type="file" id="file-input" accept=".txt" style="display: none;">
+                        <div class="dropzone-content">
+                            <div class="icon-glow">
+                                <i class="fas fa-cloud-upload-alt text-gradient"></i>
+                            </div>
+                            <h3>Drag & Drop Links File</h3>
+                            <p>or click to browse (.txt files only)</p>
+                            <span class="file-name-display" id="selected-file-name"></span>
+                        </div>
+                    </div>
+
+                    <div class="action-bar hidden" id="action-bar">
+                        <div class="links-summary">
+                            <span id="links-count-badge" class="badge">0 Links Found</span>
+                            <span class="file-name" id="badge-filename">links.txt</span>
+                        </div>
+                        <button class="btn btn-primary btn-glow" id="btn-download-all">
+                            <i class="fas fa-download"></i> Start Bulk Download
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PANEL: PARSED LINKS TABLE -->
+                <div class="glass-panel panel-links-list">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-list-ul"></i> Parsed Link Queue</h2>
+                        <span class="badge badge-secondary" id="queue-status">Empty Queue</span>
+                    </div>
+                    <div class="table-container">
+                        <table class="links-table" id="links-table">
+                            <thead>
+                                <tr>
+                                    <th width="8%">#</th>
+                                    <th>Video URL</th>
+                                    <th width="25%">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="links-tbody">
+                                <tr>
+                                    <td colspan="3" class="table-empty-state">
+                                        <i class="fas fa-link"></i>
+                                        <p>Upload a links.txt file to populate download queue</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: CONFIGURATION & TERMINAL LOGS -->
+            <section class="grid-col-right animate-slide-in" style="animation-delay: 0.1s;">
+                <!-- PANEL: SYSTEM SETTINGS -->
+                <div class="glass-panel panel-settings">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-sliders-h"></i> Configuration Settings</h2>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label for="select-cookie-file">
+                                <span><i class="fas fa-cookie-bite"></i> Cookie File Authentication</span>
+                                <i class="fas fa-question-circle tooltip-icon" title="Required to bypass TikTok bot detection. Save your cookies.txt in the app folder."></i>
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="select-cookie-file" class="form-control">
+                                    <option value="">No cookies (Default)</option>
+                                </select>
+                                <button class="btn btn-icon-refresh" id="btn-refresh-cookies" title="Scan workspace for cookie files">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-download-folder">
+                                <span><i class="fas fa-folder-open"></i> Local Save Location</span>
+                            </label>
+                            <input type="text" id="input-download-folder" class="form-control" value="tiktok_videos">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PANEL: LOGGING CONSOLE & ACTIVE PROGRESS -->
+                <div class="glass-panel panel-terminal">
+                    <div class="panel-header">
+                        <h2><i class="fas fa-terminal"></i> Download Console Log</h2>
+                        <button class="btn btn-secondary btn-sm" id="btn-clear-logs">Clear Logs</button>
+                    </div>
+                    <div class="terminal-body">
+                        <!-- PROGRESS RADIAL / CARD -->
+                        <div class="active-progress-card hidden" id="active-progress-card">
+                            <div class="progress-info-row">
+                                <span class="active-video-title" id="active-video-name">Fetching video details...</span>
+                                <span class="active-percent" id="active-progress-percent">0%</span>
+                            </div>
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="active-progress-bar" style="width: 0%;"></div>
+                            </div>
+                            <div class="progress-stats-row">
+                                <span><i class="fas fa-tachometer-alt"></i> Speed: <strong id="active-speed">0 MB/s</strong></span>
+                                <span><i class="fas fa-hourglass-half"></i> ETA: <strong id="active-eta">0s</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- LIVE LOGS -->
+                        <div class="terminal-output" id="terminal-output">
+                            <div class="log-line log-system">[SYSTEM] Ready. Paste or upload a .txt file containing video links to begin.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- GALLERY SECTION (DOWNLOADED VIDEOS) -->
+        <section class="gallery-section glass-panel animate-fade-in" style="animation-delay: 0.2s;">
+            <div class="panel-header gallery-header">
+                <div class="header-left">
+                    <h2><i class="fas fa-photo-video text-gradient"></i> Downloaded Videos Gallery</h2>
+                    <p class="section-desc">Instantly view, stream, or delete your locally saved videos</p>
+                    <div class="gallery-stats-container">
+                        <span class="gallery-stat-badge"><i class="fas fa-video"></i> <span id="stat-total-videos">0</span> Videos</span>
+                        <span class="gallery-stat-badge"><i class="fas fa-hdd"></i> <span id="stat-total-size">0.00 B</span> Current Folder Size</span>
+                        <span class="gallery-stat-badge" style="border-color: rgba(255, 0, 128, 0.2);"><i class="fas fa-wifi" style="color: #ff007f;"></i> <span id="stat-all-time-size">0.00 B</span> Network Used (All-time)</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="btn-refresh-gallery">
+                    <i class="fas fa-sync-alt"></i> Reload Gallery
+                </button>
+            </div>
+            
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Loaded via JS -->
+                <div class="gallery-empty-state">
+                    <i class="fas fa-video-slash"></i>
+                    <p>No downloaded videos found in the output directory.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL: VIDEO PLAYER -->
+    <div class="video-modal" id="video-modal">
+        <div class="video-modal-backdrop"></div>
+        <div class="video-modal-content">
+            <button class="video-modal-close" id="btn-close-modal"><i class="fas fa-times"></i></button>
+            <div class="video-player-container">
+                <video id="modal-video-player" controls autoplay></video>
+            </div>
+            <div class="video-modal-details">
+                <h3 id="modal-video-title">Video Title</h3>
+                <div class="meta-row">
+                    <span id="modal-video-size"><i class="fas fa-hdd"></i> 0 MB</span>
+                    <span id="modal-video-date"><i class="fas fa-calendar-alt"></i> Date</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
